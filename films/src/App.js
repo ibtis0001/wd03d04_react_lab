@@ -5,26 +5,40 @@ import FilmListing from './FilmListing'
 import FilmDetails from './FilmDetails'
 import Fave from './Fave'
 import TMDB from './TMDB'
-var data =  TMDB
+var data = TMDB
 
 export default class App extends Component {
+  
+  state = {
+    films: TMDB.films,
+    faves: [],
+    current: {}
+  }
+
+  handleFaveToggle(){
+    const faves = faves.slice() 
+    const filmIndex = faves.indexOf()
+        this.handleFaveToggle = this.handleFaveToggle.bind(this)
+        // console.log(filmIndex)
+  }
+
   render() {
     return (
       <div className="film-library">
-      {/* <h1>{data.films[1].title}</h1> */}
-       <div className="film-list">
-         <h1 className="section-title">FILMS</h1> 
-      {data.films.map(item=>   <FilmListing data={item}/> )}
+        {/* <h1>{data.films[1].title}</h1> */}
+        <div className="film-list">
+          <h1 className="section-title">FILMS</h1>
+          {data.films.map(item=> {return <FilmListing data={item} faves={this.state.current} films={this.state.films} />})}
+          </div>
+
+        <FilmDetails data={data} film={this.state.current} />
 
       </div>
-  <FilmDetails data={data}/>
-  
-  </div>
+      
     )
   }
 }
 
-//https://image.tmdb.org/t/p/w500/
 
 
 
@@ -37,28 +51,3 @@ export default class App extends Component {
 
 
 
-
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-      
-//     </div>
-//   );
-// }
-
-// export default App;
