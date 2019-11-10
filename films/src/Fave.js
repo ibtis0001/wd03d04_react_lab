@@ -1,31 +1,36 @@
 import React, { Component } from 'react'
-var userType
+
 export default class Fave extends Component {
+    constructor (){
+        super();
+        this.state = {
+    state = {
+            EventSelect: null,
+            isFave :false
+          }
+    }
 
-
-    handleClick = (e) => {
-        e.stopPropagation();
+      handleClick = (e) => {
+        console.log("handling Fave click!")
+        e.stopPropagation()
+        this.setState({
+          isFave: !this.state.isFave,
+          EventSelect : e
+        })
         this.props.onFaveToggle()
         // this.setState({
-        //     isFave: !this.state.isFave
+        //   isFave: !this.state.isFave,
+        //   EventSelect : e
         // })
-    }
-    // state = {
-    //     isFave: false
-    // }
+      }
     render() {
-
-
+        const isFave = (this.state.isFave) ? 'remove_from_queue' : 'add_to_queue'
+        const isFave = (this.props.isFave) ? 'remove_from_queue' : 'add_to_queue'
         return (
-
-            <div>
-
-                <div onClick={this.handleClick} className={`film-row-fave ${userType = this.props.isFave ? "add_to_queue" : "remove_from_queue"
-                    }`}>
-                    <p className="material-icons" >add_to_queue</p>
-                </div>
+            <div className={`film-row-fave ${this.state.isFave? 'remove_from_queue' : ''}`} onClick={this.handleClick}>
+            <div className={`film-row-fave ${this.props.isFave? 'remove_from_queue' : ''}`} onClick={this.handleClick}>
+                <p className="material-icons">{isFave}</p>
             </div>
         )
     }
 }
-
