@@ -1,75 +1,66 @@
+
+
 import React, { Component } from 'react'
-import logo from './logo.svg';
-import './App.css';
-import FilmListing from './FilmListing'
-import FilmDetails from './FilmDetails'
-import Fave from './Fave'
+import FilmDetails from './FilmDetails';
+import FilmListing from './FilmListing';
 import TMDB from './TMDB'
-var data = TMDB
+import Axios from "axios"
 
 export default class App extends Component {
-  constructor(){
+
+  constructor() {
     super();
-    this.handleFaveToggle = this.handleFaveToggle.bind(this);
-    this.handleDetailsClick=this.handleDetailsClick.bind(this);
     this.state = {
       films: TMDB.films,
       faves: [],
-      current: {}
+      current: {},
     }
+    this.handleFaveToggle = this.handleFaveToggle.bind(this)
+
   }
 
-  handleDetailsClick(film){
-    console.log("added "+film.title);
+  handleDetailsClick = (film) => {
+    console.log("Fetching details for " + film.title);
+    // const url = `https://api.themoviedb.org/3/movie/${film.id}?api_key=${TMDB.api_key}`
+    Axios.get(`https://api.themoviedb.org/3/movie/${film.id}?api_key=6828febc97923cd2bf72aa77211b30b6`)
+    .then((response) => {
+      this.setState(this.current = response.data)
+      // console.log(this.current)
+    })
 
-this.setState({current : film});
-console.log("jjjjjjjjjjj");
+  }
+  handleFaveToggle = (film) =>{
 
-// console.log(this.state.current);
-}
- 
-
-  handleFaveToggle(films){
     const faves = this.state.faves.slice();
-    const filmsIndex = faves.indexOf(films);
-    if(filmsIndex<0){
-    faves.push(films);
-    console.log(`Adding ${films.title} to faves...`)
+    const filmIndex = faves.indexOf(film);
+     if (filmIndex < 0){
+      faves.push(film)
+      console.log (`Adding ${film.title} to faves...`)
+      console.log(faves)
     }
-    else{
-      faves.splice(filmsIndex, 1) 
-      console.log(`Removing ${films.title} to faves...`)
+    else
+    {
+      faves.splice(filmIndex,1)
+      console.log (`Removing ${film.title} from faves...`)
+      console.log(faves)
     }
+
     this.setState({faves});
-  }
-
-  
-
+  }  
 
   render() {
-    
-    if(this.state.current.length != 0){
-      console.log(this.state.current.title)
-    }
-
     return (
-      <div className="film-library">
-        {/* <h1>{data.films[1].title}</h1> */}
-        <div className="film-list">
-          <h1 className="section-title">FILMS</h1>
-          {data.films.map(item=> {return <FilmListing  handleDetailsClick={this.handleDetailsClick} data={item} isFave={this.state.faves.includes(item)} faves={this.state.faves} films={this.state.films} onFaveToggle={()=>this.handleFaveToggle(item)} />})}
-          </div>
-
-        <FilmDetails data={data} film={this.state.current}/>
-
+      <div className="App">
+        <div className="film-library">
+          <FilmListing TMDB={TMDB.films} films={this.state.films} faves={this.state.faves} onFaveToggle={this.handleFaveToggle} />
+          <FilmDetails TMDB={TMDB.films} current={this.state.current} />
+          <FilmListing films={this.state.films} faves={this.state.faves} onFaveToggle={this.handleFaveToggle} onDetailsClick={this.handleDetailsClick}/>
+          <FilmDetails current={this.current} />
+        </div>
       </div>
-      
     )
   }
 }
-
-
-
 
 
 
